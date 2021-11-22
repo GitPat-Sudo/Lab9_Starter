@@ -87,22 +87,148 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+<script>
+  window.TrackJS && TrackJS.install({ 
+    token: "d940ebe5ad654eccb62b320c43cefed7"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+</script>
+                        
   <script>
+    TrackJS.track('Testing TrackJS!');
+                        
+    class secondNumError extends Error {
+      constructor(message) {
+      super(message);
+      this.name = "secondNumError";
+    }
+  }
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
       let output = document.querySelector('output');
-      let firstNum = document.querySelector('#first-num').value;
-      let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      try{
+        let firstNum = document.querySelector('#first-num').value;
+        let secondNum = document.querySelector('#second-num').value;
+        let operator = document.querySelector('#operator').value;
+        if(isNaN(parseInt(firstNum))){
+          throw new Error('first num not a number');
+        }
+        if(isNaN(parseInt(secondNum))){
+          throw new secondNumError('second num not a number');
+        }
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      }catch(error){
+          console.error(error); 
+      }
+      finally{
+        console.count('calculation done');
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener('click', e=>{
+      console.log('console log error');
+    });
+
+    errorBtns[1].addEventListener('click', e=>{
+      console.error('console error: error! ');
+    });
+
+    errorBtns[2].addEventListener('click', e=>{
+      console.count('console count ');
+    });
+
+    errorBtns[3].addEventListener('click', e=>{
+      console.warn('console warning ');
+    });
+
+    errorBtns[4].addEventListener('click', e=>{
+      const x = 5;
+      const y = 3;
+      const reason = 'x is expected to be less than y';
+      console.assert(x < y, {x, y, reason});
+    });
+
+    errorBtns[5].addEventListener('click', e=>{
+      console.clear();
+    });
+
+    errorBtns[6].addEventListener('click', e=>{
+      console.dir(document.head);
+    });
+
+    errorBtns[7].addEventListener('click', e=>{
+      console.dirxml(document);
+    });
+
+    errorBtns[8].addEventListener('click', e=>{
+      const label = 'Group of Console Labels';
+      console.group(label)
+    });
+
+    errorBtns[9].addEventListener('click', e=>{
+      console.groupEnd('Group of Console Labels');
+    });
+
+    errorBtns[10].addEventListener('click', e=>{
+      console.table([
+  {
+    first: 'René',
+    last: 'Magritte',
+  },
+  {
+    first: 'Chaim',
+    last: 'Soutine',
+    birthday: '18930113',
+  },
+  {
+    first: 'Henri',
+    last: 'Matisse',
+  }
+]);
+    });
+
+    errorBtns[11].addEventListener('click', e=>{
+      console.time();
+    });
+
+    errorBtns[12].addEventListener('click', e=>{
+      console.timeEnd();
+    });
+
+    errorBtns[13].addEventListener('click', e=>{
+      const first = () => { second(); };
+      const second = () => { third(); };
+      const third = () => { fourth(); };
+      const fourth = () => { console.trace(); };
+      first();
+    });
+    
+    errorBtns[14].addEventListener('click', e=>{
+      console.log(unreferenced);
+    });
+
+    try{
+      if(isNaN(parseInt("aaaaaaio"))){
+        throw new Error('not a number'); 
+      }
+    }catch(error){
+      console.log(error);
+
+    }finally{
+      console.log('ran try a catch throw ^, I have another on around firstnum and custom on around secondnum too for calculations');
+    }
+    
+
+
+
   </script>
+                        
 </body>
 
 </html>
